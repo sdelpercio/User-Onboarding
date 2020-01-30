@@ -1,12 +1,12 @@
 import React from 'react';
 import Onboarding from './Form';
-import './App.css';
+import {PageWrapper} from "./styles";
 
 function App() {
   return (
-    <div className="App">
+    <PageWrapper>
       <Onboarding />
-    </div>
+    </PageWrapper>
   );
 }
 

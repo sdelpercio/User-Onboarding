@@ -3,6 +3,15 @@ import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
+import {
+    PageWrapper,
+    Title,
+    Label,
+    StyledInlineErrorMessage,
+    Submit,
+    Input
+  } from "./styles";
+
 const Onboarding = ({ errors, touched, status }) => {
     const [users, setUsers] = useState([]);
 
@@ -12,39 +21,40 @@ const Onboarding = ({ errors, touched, status }) => {
 
     return (
         <div>
+            <Title>Sign Up</Title>
             <Form>
-                <label>
+                <Label>
                     Name:
-                    <Field type='text' name='name' />
+                    <Input type='text' name='name' />
                     { touched.name && errors.name && (
-                        <p className='errors'>{ errors.name }</p>
+                        <StyledInlineErrorMessage className='errors'>{ errors.name }</StyledInlineErrorMessage>
                     ) }
-                </label>
-                <label>
+                </Label>
+                <Label>
                     Email:
-                    <Field type='email' name='email' />
+                    <Input type='email' name='email' />
                     { touched.email && errors.email && (
-                        <p className='errors'>{ errors.email }</p>
+                        <StyledInlineErrorMessage className='errors'>{ errors.email }</StyledInlineErrorMessage>
                     ) }
-                </label>
-                <label>
+                </Label>
+                <Label>
                     Password:
-                    <Field type='password' name='password' />
+                    <Input type='password' name='password' />
                     { touched.password && errors.password && (
-                        <p className='errors'>{ errors.password }</p>
+                        <StyledInlineErrorMessage className='errors'>{ errors.password }</StyledInlineErrorMessage>
                     ) }
-                </label>
-                <label>
+                </Label>
+                <Label>
                     <Field type='checkbox' name='tos' />
-                    Terms of Service (Check to agree)
+                    <span>Terms of Service (Check to agree)</span>
                     { errors.tos && (
-                        <p className='errors'>{ errors.tos }</p>
+                        <StyledInlineErrorMessage className='errors'>{ errors.tos }</StyledInlineErrorMessage>
                     ) }
-                </label>
-                <button type='submit' >Submit</button>
+                </Label>
+                <Submit type='submit' >Submit</Submit>
             </Form>
-            <div>
-                <h1>Users</h1>
+            <PageWrapper>
+                <Title>Users</Title>
                 {
                     users.map(user => (
                         <ul key={user.password}>
@@ -53,7 +63,7 @@ const Onboarding = ({ errors, touched, status }) => {
                         </ul>
                     ))
                 }
-            </div>
+            </PageWrapper>
         </div>
     )
 }
