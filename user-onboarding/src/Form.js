@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
-const Onboarding = ({ values, errors, touched }) => {
+const Onboarding = ({ errors, touched, status }) => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        status && setUsers(users => [...users, status]);
+    }, [status])
+
     return (
         <div>
             <Form>
@@ -30,9 +37,23 @@ const Onboarding = ({ values, errors, touched }) => {
                 <label>
                     <Field type='checkbox' name='tos' />
                     Terms of Service (Check to agree)
+                    { errors.tos && (
+                        <p className='errors'>{ errors.tos }</p>
+                    ) }
                 </label>
                 <button type='submit' >Submit</button>
             </Form>
+            <div>
+                <h1>Users</h1>
+                {
+                    users.map(user => (
+                        <ul key={user.password}>
+                            <li>Name: {user.name}</li>
+                            <li>Email: {user.email}</li>
+                        </ul>
+                    ))
+                }
+            </div>
         </div>
     )
 }
@@ -56,9 +77,19 @@ const FormikOnboarding = withFormik({
         .string()
         .min(6, 'Password must be at least 6 characters long')
         .required(),
+        tos: Yup.boolean().oneOf([true], 'Must Accept Terms and Conditions')
     }),
-    handleSubmit(values, formikBag) {
+    handleSubmit(values, {setStatus, resetForm}) {
         console.log('submitting', values);
+        axios.post('https://reqres.in/api/users', values)
+        .then(res => {
+            console.log('response', res)
+            setStatus(res.data);
+            resetForm();
+        })
+        .catch(err => {
+            console.log('failure', err)
+        })
     }
 })(Onboarding);
 export default FormikOnboarding
